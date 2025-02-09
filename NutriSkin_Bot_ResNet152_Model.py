@@ -11,19 +11,15 @@ Original file is located at
 # It is defined by the kaggle/python Docker image: https://github.com/kaggle/docker-python
 # For example, here's several helpful packages to load
 
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import numpy as np
+import pandas as pd
 
-# Input data files are available in the read-only "../input/" directory
-# For example, running this (by clicking run or pressing Shift+Enter) will list all files under the input directory
 
 import os
 for dirname, _, filenames in os.walk('/kaggle/input'):
     for filename in filenames:
         print(os.path.join(dirname, filename))
 
-# You can write up to 20GB to the current directory (/kaggle/working/) that gets preserved as output when you create a version using "Save & Run All"
-# You can also write temporary files to /kaggle/temp/, but they won't be saved outside of the current session
 
 # Commented out IPython magic to ensure Python compatibility.
 import os
@@ -31,16 +27,12 @@ import pandas as pd
 import numpy as np
 import warnings
 warnings.filterwarnings(action="ignore")
-
 import matplotlib.pyplot as plt
-# %matplotlib inline
 import seaborn as sns
-
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 import sklearn.metrics as metrics
-
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
@@ -53,6 +45,8 @@ from tensorflow.keras.applications.vgg19 import VGG19
 from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2
 from tensorflow.keras.applications import ResNet152
 from sklearn.utils.class_weight import compute_class_weight
+
+# classes 
 
 classes = [
     "Acne and Rosacea Photos",
