@@ -1,0 +1,13 @@
+Kaggle datasets: Dermnet
+https://www.kaggle.com/datasets/shubhamgoel27/dermnet
+
+
+
+numpy
+tensorflow 
+tensorflow.keras.preprocessing --- image
+tensorflow.keras.applications.mobilenet_v3 --- preprocess_input
+flask -- Flask, request, jsonify, render_template
+werkzeug.utils --- secure_filename
+
+

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dietary Diagnosis Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        #chatbox {
+            width: 80%;
+            max-width: 500px;
+            height: 400px;
+            margin: auto;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #fff;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 8px;
+            margin: 5px;
+            display: inline-block;
+            max-width: 80%;
+        }
+        .bot { background-color: #f1f1f1; color: black; align-self: flex-start; }
+        .user { background-color: #007bff; color: white; align-self: flex-end; }
+        #upload-box, #advice-box { margin-top: 10px; }
+        .btn {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #upload-btn { background-color: #28a745; color: white; }
+        #advice-btn {
+            background-color: #ff9800;
+            color: white;
+            display: none;
+        }
+        #loader {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>NutriSkin Bot 🤖</h2>
+    <div id="chatbox">
+        <div class="message bot">Hello! Please upload an image for diagnosis.</div>
+    </div>
+
+    <div id="upload-box">
+        <input type="file" id="image-input" name="file">
+        <button id="upload-btn" class="btn">🔍 Analyze Image</button>
+    </div>
+
+    <img id="loader" src="https://i.gifer.com/ZZ5H.gif" width="50px" alt="loading...">
+    
+    <button id="advice-btn" class="btn">📢 Need Nutritional Advice?</button>
+
+    <script>
+        let detectedDisease = "";
+    
+        document.getElementById("upload-btn").addEventListener("click", function() {
+            let fileInput = document.getElementById("image-input");
+            let file = fileInput.files[0];
+    
+            if (!file) {
+                alert("❌ Please select an image first.");
+                return;
+            }
+    
+            let formData = new FormData();
+            formData.append("file", file, file.name);
+    
+            let chatbox = document.getElementById("chatbox");
+            chatbox.innerHTML += `<div class="message user">📤 Uploading image...</div>`;
+    
+            document.getElementById("loader").style.display = "block";
+    
+            fetch("/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("loader").style.display = "none";
+                if (data.error) {
+                    alert("❌ " + data.error);
+                } else {
+                    detectedDisease = data.disease;
+                    chatbox.innerHTML += `<div class="message bot">📌 Diagnosis: ${detectedDisease}</div>`;
+                    document.getElementById("advice-btn").style.display = "inline-block";
+                }
+            });
+        });
+    
+        // 🔹 إضافة كود جلب النصيحة عند الضغط على زر "📢 Need Nutritional Advice?"
+        document.getElementById("advice-btn").addEventListener("click", function() {
+            if (!detectedDisease) {
+                alert("❌ Please analyze an image first.");
+                return;
+            }
+    
+            fetch(`/get-advice?disease=${encodeURIComponent(detectedDisease)}`)
+            .then(response => response.json())
+            .then(data => {
+                let chatbox = document.getElementById("chatbox");
+                chatbox.innerHTML += `<div class="message bot">💡 Nutritional Advice: ${data.advice}</div>`;
+            });
+        });
+    </script>
+    
+
+</body>
+</html>
